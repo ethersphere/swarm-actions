@@ -1,0 +1,34 @@
+name: 'Write to a Swarm feed'
+description: 'Write to a Swarm feed using GitHub Actions'
+branding:
+  icon: upload
+  color: orange
+
+inputs:
+  bee-url:
+    description: 'URL of Bee node'
+    required: true
+
+  postage-batch-id:
+    description: 'Batch ID of Postage Stamp that will be used to update the feed'
+    required: true
+
+  reference:
+    description: 'Reference to write to the feed'
+    required: true
+
+  topic:
+    description: 'Topic for the feed'
+    required: true
+
+  signer:
+    description: 'Signer used to update the feed'
+    required: true
+
+outputs:
+  reference:
+    description: 'Reference to the Single Owner Chunk that contains the new update and pointer to the updated chunk reference'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

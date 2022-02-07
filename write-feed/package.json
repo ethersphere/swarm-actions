@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "name": "write-feed",
+  "version": "0.0.0",
+  "description": "Write to a Swarm feed",
+  "main": "build/main.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint **/*.ts",
+    "package": "ncc build --source-map --license licenses.txt",
+    "ci:package": "yarn build && yarn package"
+  }
+}
