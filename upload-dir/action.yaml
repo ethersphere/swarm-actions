@@ -1,5 +1,5 @@
-name: 'Beeload to Swarm network'
-description: 'Toolkit to uploading data to Swarm network with GitHub Actions'
+name: 'Upload directories to Swarm'
+description: 'Upload directories to Swarm using GitHub Actions'
 branding:
   icon: upload-cloud
   color: orange
