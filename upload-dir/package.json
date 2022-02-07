@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "name": "upload-dir",
+  "version": "0.0.0",
+  "description": "Upload directories to Swarm",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint **/*.ts",
+    "package": "ncc build --source-map --license licenses.txt",
+    "ci:package": "yarn build && yarn package"
+  }
+}

@@ -1,0 +1,31 @@
+name: 'Beeload to Swarm network'
+description: 'Toolkit to uploading data to Swarm network with GitHub Actions'
+branding:
+  icon: upload-cloud
+  color: orange
+
+inputs:
+  bee-url:
+    description: 'URL of Bee node'
+    required: false
+    default: 'https://bee-9.gateway.ethswarm.org'
+
+  postage-batch-id:
+    description: 'Batch ID of Postage Stamp that will be used for upload'
+    required: false
+    default: '0000000000000000000000000000000000000000000000000000000000000000'
+
+  dir:
+    description: 'Path to directory that should be uploaded'
+    required: false
+
+outputs:
+  reference:
+    description: 'Swarm hash of the uploaded content'
+
+  tagUid:
+    description: 'Automatically created tag's UID'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
