@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: filoozom/swarm-actions/hello-world@v1
+      - uses: filoozom/swarm-actions/upload-dir@v1
         with:
           bee-url: https://bee-9.gateway.ethswarm.org
           postage-batch-id: '0000000000000000000000000000000000000000000000000000000000000000'
