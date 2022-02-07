@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { Bee } from '@ethersphere/bee-js'
+import { Bee, BATCH_ID_HEX_LENGTH } from '@ethersphere/bee-js'
 import type { BatchId } from '@ethersphere/bee-js'
 
 type Inputs = {
@@ -17,8 +17,8 @@ const run = async ({ beeUrl, postageBatchId, dir }: Inputs): Promise<void> => {
 
 const main = async (): Promise<void> => {
   const postageBatchId = core.getInput('postage-batch-id', { required: true })
-  if (postageBatchId.length !== 64) {
-    throw new Error('postage-batch-id must be 64 characters long')
+  if (postageBatchId.length !== BATCH_ID_HEX_LENGTH) {
+    throw new Error(`postage-batch-id must be ${BATCH_ID_HEX_LENGTH} characters long`)
   }
 
   return run({
