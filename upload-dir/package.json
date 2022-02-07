@@ -3,7 +3,7 @@
   "name": "upload-dir",
   "version": "0.0.0",
   "description": "Upload directories to Swarm",
-  "main": "dist/main.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write **/*.ts",

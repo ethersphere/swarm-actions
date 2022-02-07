@@ -3,7 +3,7 @@
   "name": "reference-to-cid",
   "version": "0.0.0",
   "description": "Convert Swarm reference to CID",
-  "main": "dist/main.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write **/*.ts",
