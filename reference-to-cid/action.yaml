@@ -1,0 +1,17 @@
+name: 'Convert Swarm reference to CID'
+description: 'Convert Swarm reference to CID using GitHub Actions'
+branding:
+  icon: shuffle
+  color: orange
+
+inputs:
+  reference:
+    description: 'Swarm reference'
+
+outputs:
+  cid:
+    description: 'Content ID corresponding to reference'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

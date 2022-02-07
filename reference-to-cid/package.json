@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "reference-to-cid",
+  "version": "0.0.0",
+  "description": "Convert Swarm reference to CID",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint **/*.ts",
+    "package": "ncc build --source-map --license licenses.txt",
+    "ci:package": "yarn build && yarn package"
+  },
+  "dependencies": {
+    "@ethersphere/swarm-cid": "0.1.0"
+  }
+}
