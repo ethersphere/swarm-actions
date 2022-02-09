@@ -10,6 +10,7 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint **/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
-    "ci:package": "yarn build && yarn package"
+    "ci:package": "yarn build && yarn package",
+    "all": "yarn build && yarn format && yarn lint && yarn package"
   }
 }
