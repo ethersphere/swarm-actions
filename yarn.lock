@@ -31,12 +31,12 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@ethersphere/bee-js@3.2.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@ethersphere/bee-js/-/bee-js-3.2.0.tgz#521eac63676d13d21585166754d2b6d20ee9e332"
-  integrity sha512-ZVcbl8dsytx07+SxTmsKSn0X1zojR7vMb0uxQ+fGk05JHFNGBY2Qv/5AP7rI/SqGWDjHWIMB8Ww+ErURdyFXqA==
+"@ethersphere/bee-js@3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@ethersphere/bee-js/-/bee-js-3.3.0.tgz#01d50e8b182c58573564c915bba86d85c18175c9"
+  integrity sha512-kCY6BA6SnhShceprRPHT+DwXFZwL77Vfa7BYSDg5MWS69Yc2vDVgPjqEUO/S8Mj+4Cb1RJ2/5+KycueB71icCQ==
   dependencies:
-    "@types/readable-stream" "^2.3.11"
+    "@types/readable-stream" "^2.3.13"
     bufferutil "^4.0.3"
     cross-blob "^2.0.1"
     elliptic "^6.5.4"
@@ -45,10 +45,11 @@
     ky "^0.25.1"
     ky-universal "^0.8.2"
     readable-stream "^3.6.0"
+    semver "^7.3.5"
     tar-js "^0.3.0"
     utf-8-validate "^5.0.8"
     web-streams-polyfill "^3.1.0"
-    ws "^7.5.0"
+    ws "^8.5.0"
 
 "@ethersphere/swarm-cid@0.1.0":
   version "0.1.0"
@@ -107,7 +108,7 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.24.tgz#9624338b685fea65fb1aba6c7b7eb45ca2df7188"
   integrity sha512-Ezv33Rl4mIi6YdSHfIRNBd4Q9kUe5okiaw/ikvJiJDmuQZNW5kfdg7+oQPF8NO6sTcr3woIpj3jANzTXdvEZXA==
 
-"@types/readable-stream@^2.3.11":
+"@types/readable-stream@^2.3.13":
   version "2.3.13"
   resolved "https://registry.yarnpkg.com/@types/readable-stream/-/readable-stream-2.3.13.tgz#46451c1b87cb61010e420ac02a76cfc1b2c2089a"
   integrity sha512-4JSCx8EUzaW9Idevt+9lsRAt1lcSccoQfE+AouM1gk8sFxnnytKNIO3wTl9Dy+4m6jRJ1yXhboLHHT/LXBQiEw==
@@ -1136,10 +1137,10 @@ wrappy@1:
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
 
-ws@^7.5.0:
-  version "7.5.6"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.6.tgz#e59fc509fb15ddfb65487ee9765c5a51dec5fe7b"
-  integrity sha512-6GLgCqo2cy2A2rjCNFlxQS6ZljG/coZfZXclldI8FB/1G3CCI36Zd8xy2HrFVACi8tfk5XrgLQEk+P0Tnz9UcA==
+ws@^8.5.0:
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.5.0.tgz#bfb4be96600757fe5382de12c670dab984a1ed4f"
+  integrity sha512-BWX0SWVgLPzYwF8lTzEy1egjhS4S4OEAHfsO8o65WOVsrnSRGaSiUaa9e0ggGlkMTtBlmOpEXiie9RUcBO86qg==
 
 yallist@^4.0.0:
   version "4.0.0"
