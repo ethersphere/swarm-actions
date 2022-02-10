@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "swarm-actions",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "GitHub Actions for Swarm",
   "repository": {
     "type": "git",
