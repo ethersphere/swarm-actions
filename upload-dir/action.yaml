@@ -24,7 +24,7 @@ outputs:
     description: 'Swarm hash of the uploaded content'
 
   tagUid:
-    description: 'Automatically created tag's UID'
+    description: "Automatically created tag's UID"
 
 runs:
   using: 'node16'
