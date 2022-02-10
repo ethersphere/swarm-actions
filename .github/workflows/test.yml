@@ -14,20 +14,10 @@ jobs:
       - run: yarn install
       - run: yarn workspaces run all
 
-  test-reference-to-cid:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
       - uses: ./reference-to-cid
         with:
           reference: 0f28cbca43be232f524a17fd6db3b99e044b6bd5ba21055b286f59e472bde42f
 
-  test-upload-dir:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
       - uses: ./upload-dir
         with:
           dir: ./upload-dir/dist
