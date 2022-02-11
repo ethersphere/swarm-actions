@@ -12,12 +12,12 @@ type Inputs = {
 }
 
 const signerToAddress = (signer: string): string => {
-  const signerBuf = Buffer.from(stripHexPrefix(signer), 'hex')
-  return privateToAddress(signerBuf).toString('hex')
+  return privateToAddress(Buffer.from(signer, 'hex')).toString('hex')
 }
 
-const run = async ({ beeUrl, postageBatchId, topic, signer, reference }: Inputs): Promise<void> => {
+const run = async ({ beeUrl, postageBatchId, topic, signer: signerString, reference }: Inputs): Promise<void> => {
   const bee = new Bee(beeUrl)
+  const signer = stripHexPrefix(signerString)
   const writer = bee.makeFeedWriter('sequence', topic, signer)
   const response = await writer.upload(postageBatchId, reference)
   const manifest = await bee.createFeedManifest(postageBatchId, 'sequence', topic, signerToAddress(signer))
