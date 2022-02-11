@@ -7,11 +7,13 @@ branding:
 inputs:
   bee-url:
     description: 'URL of Bee node'
-    required: true
+    required: false
+    default: 'https://bee-9.gateway.ethswarm.org'
 
   postage-batch-id:
     description: 'Batch ID of Postage Stamp that will be used to update the feed'
-    required: true
+    required: false
+    default: '0000000000000000000000000000000000000000000000000000000000000000'
 
   reference:
     description: 'Reference to write to the feed'
