@@ -29,6 +29,9 @@ outputs:
   reference:
     description: 'Reference to the Single Owner Chunk that contains the new update and pointer to the updated chunk reference'
 
+  manifest:
+    description: 'Reference to the feed manifest chunk'
+
 runs:
   using: 'node16'
   main: 'dist/index.js'

@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import { Bee, BATCH_ID_HEX_LENGTH, REFERENCE_HEX_LENGTH } from '@ethersphere/bee-js'
 import type { BatchId, Reference } from '@ethersphere/bee-js'
+import { privateToAddress, stripHexPrefix } from 'ethereumjs-util'
 
 type Inputs = {
   beeUrl: string
@@ -10,11 +11,19 @@ type Inputs = {
   reference: Reference
 }
 
+const signerToAddress = (signer: string): string => {
+  const signerBuf = Buffer.from(stripHexPrefix(signer), 'hex')
+  return privateToAddress(signerBuf).toString('hex')
+}
+
 const run = async ({ beeUrl, postageBatchId, topic, signer, reference }: Inputs): Promise<void> => {
   const bee = new Bee(beeUrl)
-  const feedWriter = bee.makeFeedWriter('sequence', topic, signer)
-  const response = await feedWriter.upload(postageBatchId, reference)
+  const writer = bee.makeFeedWriter('sequence', topic, signer)
+  const response = await writer.upload(postageBatchId, reference)
+  const manifest = await bee.createFeedManifest(postageBatchId, 'sequence', topic, signerToAddress(signer))
+
   core.setOutput('reference', response)
+  core.setOutput('manifest', manifest)
 }
 
 const main = async (): Promise<void> => {
