@@ -28,8 +28,4 @@ const main = async (): Promise<void> => {
   })
 }
 
-try {
-  await main()
-} catch (err) {
-  core.setFailed(err instanceof Error ? err.message : JSON.stringify(err))
-}
+main().catch((err) => core.setFailed(err instanceof Error ? err.message : JSON.stringify(err)))
