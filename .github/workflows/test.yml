@@ -18,10 +18,25 @@ jobs:
       - run: yarn install
       - run: yarn workspaces run all
 
-      - uses: ./reference-to-cid
-        with:
-          reference: 0f28cbca43be232f524a17fd6db3b99e044b6bd5ba21055b286f59e472bde42f
-
       - uses: ./upload-dir
+        id: upload
         with:
           dir: ./upload-dir/dist
+
+      - uses: ./write-feed
+        id: feed
+        with:
+          reference: ${{ steps.upload.outputs.reference }}
+          topic: 'swarm-actions-test'
+          signer: ${{ secrets.SIGNER }}
+
+      - uses: ./reference-to-cid
+        id: cid
+        with:
+          reference: ${{ steps.feed.outputs.manifest }}
+
+      - run: |
+          echo 'Chunk Reference: ${{ steps.upload.outputs.reference }}'
+          echo 'Feed Reference: ${{ steps.feed.outputs.reference }}'
+          echo 'Feed Manifest: ${{ steps.feed.outputs.manifest }}'
+          echo 'Feed Bzz.link: https://${{ steps.cid.outputs.cid }}.bzz.link'
