@@ -19,7 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "1.6.0",
-    "@ethersphere/bee-js": "3.3.0"
+    "@ethersphere/bee-js": "3.3.1"
   },
   "devDependencies": {
     "@tsconfig/node16": "1.0.2",

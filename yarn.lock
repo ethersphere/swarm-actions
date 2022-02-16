@@ -31,10 +31,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@ethersphere/bee-js@3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@ethersphere/bee-js/-/bee-js-3.3.0.tgz#01d50e8b182c58573564c915bba86d85c18175c9"
-  integrity sha512-kCY6BA6SnhShceprRPHT+DwXFZwL77Vfa7BYSDg5MWS69Yc2vDVgPjqEUO/S8Mj+4Cb1RJ2/5+KycueB71icCQ==
+"@ethersphere/bee-js@3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@ethersphere/bee-js/-/bee-js-3.3.1.tgz#66d36b3ecacd02ac3f8d017096afa38076578ce5"
+  integrity sha512-4XiyUD9sYZJ5Wac4/2oRKDfoUlQjea3xxMj80nqsDCUfrUTzIGwTdRbLSA7LhINbCZMP7vn9EVRq/DYe0kFGOA==
   dependencies:
     "@types/readable-stream" "^2.3.13"
     bufferutil "^4.0.3"
@@ -44,7 +44,6 @@
     js-sha3 "^0.8.0"
     ky "^0.25.1"
     ky-universal "^0.8.2"
-    readable-stream "^3.6.0"
     semver "^7.3.5"
     tar-js "^0.3.0"
     utf-8-validate "^5.0.8"
