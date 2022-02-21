@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: filoozom/swarm-actions/upload-dir@v1
         with:
-          bee-url: https://bee-9.gateway.ethswarm.org
+          bee-url: https://api.gateway.ethswarm.org
           postage-batch-id: '0000000000000000000000000000000000000000000000000000000000000000'
           dir: ./dist
 ```
@@ -23,7 +23,7 @@ jobs:
 
 | Name               | Required | Default                                                            | Description                                            |
 | ------------------ | -------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
-| `bee-url`          | `false`  | `https://bee-9.gateway.ethswarm.org`                               | URL of Bee node                                        |
+| `bee-url`          | `false`  | `https://api.gateway.ethswarm.org`                                 | URL of Bee node                                        |
 | `postage-batch-id` | `false`  | `0000000000000000000000000000000000000000000000000000000000000000` | Batch ID of Postage Stamp that will be used for upload |
 | `dir`              | `true`   | -                                                                  | Path to directory that should be uploaded              |
 

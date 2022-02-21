@@ -25,7 +25,7 @@ jobs:
 
 | Name               | Required | Default                                                            | Description                                            |
 | ------------------ | -------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
-| `bee-url`          | `false`  | `https://bee-9.gateway.ethswarm.org`                               | URL of Bee node                                        |
+| `bee-url`          | `false`  | `https://api.gateway.ethswarm.org`                                 | URL of Bee node                                        |
 | `postage-batch-id` | `false`  | `0000000000000000000000000000000000000000000000000000000000000000` | Batch ID of Postage Stamp that will be used for upload |
 | `reference`        | `true`   | -                                                                  | Swarm reference                                        |
 | `topic`            | `true`   | -                                                                  | Topic for the feed                                     |

@@ -8,7 +8,7 @@ inputs:
   bee-url:
     description: 'URL of Bee node'
     required: false
-    default: 'https://bee-9.gateway.ethswarm.org'
+    default: 'https://api.gateway.ethswarm.org'
 
   postage-batch-id:
     description: 'Batch ID of Postage Stamp that will be used to update the feed'
