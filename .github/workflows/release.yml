@@ -37,9 +37,16 @@ jobs:
           echo ::set-output name=minor::$MINOR
 
       - uses: EndBug/add-and-commit@v8
+        with:
+          add: 'package.json'
+          default_author: github_actor
+          message: 'Bump to v${{ steps.get-version.outputs.version }}'
+          push: true
+
+      - uses: EndBug/add-and-commit@v8
         id: commit
         with:
-          add: '["./*/dist/* --force", "package.json"]'
+          add: '*/dist/* --force'
           remove: './node_modules/*'
           default_author: github_actor
           message: 'Release v${{ steps.get-version.outputs.version }}'
