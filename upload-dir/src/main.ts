@@ -1,15 +1,17 @@
 import * as core from '@actions/core'
 import { Bee, BATCH_ID_HEX_LENGTH } from '@ethersphere/bee-js'
 import type { BatchId } from '@ethersphere/bee-js'
+import { parseHeaders } from 'swarm-actions-libs'
 
 type Inputs = {
   beeUrl: string
   postageBatchId: BatchId
   dir: string
+  headers: Record<string, string>
 }
 
-const run = async ({ beeUrl, postageBatchId, dir }: Inputs): Promise<void> => {
-  const bee = new Bee(beeUrl)
+const run = async ({ beeUrl, postageBatchId, dir, headers }: Inputs): Promise<void> => {
+  const bee = new Bee(beeUrl, { defaultHeaders: headers })
   const { reference, tagUid } = await bee.uploadFilesFromDirectory(postageBatchId, dir)
   core.setOutput('reference', reference)
   core.setOutput('tagUid', tagUid)
@@ -25,6 +27,7 @@ const main = async (): Promise<void> => {
     beeUrl: core.getInput('bee-url', { required: true }),
     dir: core.getInput('dir', { required: true }),
     postageBatchId: postageBatchId as BatchId,
+    headers: parseHeaders(core.getInput('headers')),
   })
 }
 

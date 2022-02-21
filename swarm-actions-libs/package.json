@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "swarm-actions-libs",
+  "version": "0.0.0",
+  "description": "Libraries for swarm-actions",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write src/*.ts",
+    "format-check": "prettier --check src/*.ts",
+    "lint": "eslint src/*.ts",
+    "all": "yarn build && yarn format && yarn lint"
+  }
+}

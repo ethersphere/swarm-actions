@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import { Bee, BATCH_ID_HEX_LENGTH, REFERENCE_HEX_LENGTH } from '@ethersphere/bee-js'
 import type { BatchId, Reference } from '@ethersphere/bee-js'
 import { privateToAddress, stripHexPrefix } from 'ethereumjs-util'
+import { parseHeaders } from 'swarm-actions-libs'
 
 type Inputs = {
   beeUrl: string
@@ -9,6 +10,7 @@ type Inputs = {
   topic: string
   signer: string
   reference: Reference
+  headers: Record<string, string>
 }
 
 const signerToAddress = (signer: string): string => {
@@ -21,8 +23,9 @@ const run = async ({
   topic: topicString,
   signer: signerString,
   reference,
+  headers,
 }: Inputs): Promise<void> => {
-  const bee = new Bee(beeUrl)
+  const bee = new Bee(beeUrl, { defaultHeaders: headers })
   const signer = stripHexPrefix(signerString)
   const topic = bee.makeFeedTopic(topicString)
 
@@ -51,6 +54,7 @@ const main = async (): Promise<void> => {
     topic: core.getInput('topic', { required: true }),
     postageBatchId: postageBatchId as BatchId,
     reference: reference as Reference,
+    headers: parseHeaders(core.getInput('headers')),
   })
 }
 

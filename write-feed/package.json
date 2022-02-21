@@ -14,6 +14,7 @@
     "all": "yarn build && yarn format && yarn lint && yarn package"
   },
   "dependencies": {
-    "ethereumjs-util": "^7.1.4"
+    "ethereumjs-util": "^7.1.4",
+    "swarm-actions-libs": "^0.0.0"
   }
 }

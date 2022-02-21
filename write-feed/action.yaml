@@ -27,6 +27,10 @@ inputs:
     description: 'Signer used to update the feed'
     required: true
 
+  headers:
+    description: 'Headers used for the HTTP call to bee'
+    required: false
+
 outputs:
   reference:
     description: 'Reference to the Single Owner Chunk that contains the new update and pointer to the updated chunk reference'

@@ -19,6 +19,10 @@ inputs:
     description: 'Path to directory that should be uploaded'
     required: false
 
+  headers:
+    description: 'Headers used for the HTTP call to bee'
+    required: false
+
 outputs:
   reference:
     description: 'Swarm hash of the uploaded content'

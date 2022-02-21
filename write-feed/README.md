@@ -19,6 +19,9 @@ jobs:
           reference: '0000000000000000000000000000000000000000000000000000000000000000'
           topic: my.website/topic
           signer: '0x634fb5a872396d9693e5c9f9d7233cfa93f395c093371017ff44aa9ae6564cdd'
+          headers: |
+            Authorization: Bearer ...
+            X-Header: Value
 ```
 
 ## Inputs
@@ -30,9 +33,30 @@ jobs:
 | `reference`        | `true`   | -                                                                  | Swarm reference                                        |
 | `topic`            | `true`   | -                                                                  | Topic for the feed                                     |
 | `signer`           | `true`   | -                                                                  | Signer used to update the feed                         |
+| `headers`          | `false`  | -                                                                  | Headers used for the HTTP call to bee                  |
 
 ## Outputs
 
 | Name        | Description                                                                                                 |
 | ----------- | ----------------------------------------------------------------------------------------------------------- |
 | `reference` | Reference to the Single Owner Chunk that contains the new update and pointer to the updated chunk reference |
+
+## Comments
+
+### Headers
+
+Headers can be used with the following syntax (don't forget the `|`):
+
+```yaml
+with:
+  headers: |
+    Authorization: Bearer ...
+    X-Header: Value
+```
+
+For single headers, this can be shortened to:
+
+```yaml
+with:
+  headers: 'Authorization: Bearer ...'
+```
