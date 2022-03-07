@@ -77,12 +77,12 @@ runs:
       with:
         result-encoding: string
         script: |
-          const { commit } = await github.rest.git.getCommit({
+          const { data } = await github.rest.git.getCommit({
             owner: context.repo.owner,
             repo: context.repo.repo,
             commit_sha: '${{ github.event.pull_request.head.sha }}'
           });
-          return commit.message
+          return data.message
 
     - name: Find preview comment
       if: github.event.pull_request.number
