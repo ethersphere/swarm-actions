@@ -32,8 +32,8 @@ jobs:
 | `postage-batch-id` | `false`  | `0000000000000000000000000000000000000000000000000000000000000000` | Batch ID of Postage Stamp that will be used for upload                            |
 | `dir`              | `false`  | `./build`                                                          | Path to build directory that should be uploaded. Default: ./build                 |
 | `preview`          | `false`  | `false`                                                            | Specifies if PR preview comment should be created for PR branches. Default: false |
-| `token`            | `false`  | `false`                                                            | Token to be used for creating the PR comment. Default: GITHUB_TOKEN               |
-| `headers`          | `false`  | `false`                                                            | Headers used for the HTTP call to bee                                             |
+| `token`            | `false`  | `GITHUB_TOKEN`                                                     | Token to be used for creating the PR comment. Default: GITHUB_TOKEN               |
+| `headers`          | `false`  | -                                                                  | Headers used for the HTTP call to bee                                             |
 
 ## Outputs
 
