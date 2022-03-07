@@ -51,9 +51,11 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 2
+    - shell: bash
+      run: |
+        git branch
+        git status
+        git log
 
     - id: upload
       name: Upload to Swarm
