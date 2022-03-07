@@ -45,7 +45,6 @@ jobs:
         id: pr-preview
         with:
           dir: ./upload-dir/dist
-          preview: true
 
       - run: |
           echo 'Swarm hash: ${{ steps.pr-preview.outputs.swarm-hash }}'
