@@ -1,0 +1,110 @@
+name: 'pr-preview'
+description: 'GitHub Actions bundle to upload Pull Requests to Swarm'
+branding:
+  icon: upload-cloud
+  color: orange
+
+inputs:
+  bee-url:
+    description: 'URL of Bee node'
+    required: false
+    default: 'https://api.gateway.ethswarm.org'
+
+  bzz-link-url:
+    description: 'URL of for Bzz.link'
+    required: false
+    default: 'https://<<CID>>.bzz.link'
+
+  postage-batch-id:
+    description: 'Batch ID of Postage Stamp that will be used for upload'
+    required: false
+    default: '0000000000000000000000000000000000000000000000000000000000000000'
+
+  dir:
+    description: 'Path to build directory that should be uploaded. Default: ./build'
+    required: false
+    default: './build'
+
+  token:
+    description: 'Token to be used for creating the PR comment. Default: GITHUB_TOKEN'
+    required: false
+    default: ${{ github.token }}
+
+  headers:
+    description: 'Headers used for the HTTP call to bee'
+    required: false
+
+outputs:
+  swarm-hash:
+    description: 'Swarm hash of the uploaded content'
+    value: ${{ steps.upload.outputs.reference }}
+
+  url:
+    description: 'Bzz link URL'
+    value: ${{ steps.metadata.outputs.bzz-link }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: upload
+      name: Upload to Swarm
+      uses: filoozom/swarm-actions/upload-dir@v0
+      with:
+        bee-url: ${{ inputs.bee-url }}
+        postage-batch-id: ${{ inputs.postage-batch-id }}
+        dir: ${{ inputs.dir }}
+        headers: ${{ inputs.headers }}
+
+    - id: cid
+      name: Convert reference to CID
+      uses: filoozom/swarm-actions/reference-to-cid@v0
+      with:
+        reference: ${{ steps.upload.outputs.reference }}
+
+    - id: metadata
+      name: Get metadata
+      shell: bash
+      run: |
+        BZZ_LINK_BASE_URL="${{ inputs.bzz-link-url }}"
+        BZZ_LINK_URL=${BZZ_LINK_BASE_URL/<<CID>>/${{ steps.cid.outputs.cid }}}
+        echo "::set-output name=bzz-link::$BZZ_LINK_URL"
+        echo "Swarm Hash: ${{ steps.upload.outputs.reference }}"
+        echo "Bzz link URL: $BZZ_LINK_URL"
+
+    - id: commit
+      name: Fetch commit information
+      uses: actions/github-script@v6
+      with:
+        result-encoding: string
+        script: |
+          const { data } = await github.rest.git.getCommit({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            commit_sha: '${{ github.event.pull_request.head.sha }}'
+          });
+          return data.message
+
+    - name: Find preview comment
+      if: github.event.pull_request.number
+      uses: peter-evans/find-comment@v1
+      id: comment
+      with:
+        token: ${{ inputs.token }}
+        issue-number: ${{ github.event.pull_request.number }}
+        body-includes: PR preview in Swarm
+
+    - name: Create or update preview comment
+      if: github.event.pull_request.number
+      uses: peter-evans/create-or-update-comment@v1
+      with:
+        token: ${{ inputs.token }}
+        comment-id: ${{ steps.comment.outputs.comment-id }}
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          ## 🐝 PR preview in Swarm
+
+          **Preview URL:** ${{ steps.metadata.outputs.bzz-link }}
+          **Swarm Hash:** `${{ steps.upload.outputs.reference }}`
+          **Commit Hash:** ${{ github.event.pull_request.head.sha }}
+          **Commit Message:** ${{ steps.commit.outputs.result }}
+        edit-mode: replace
