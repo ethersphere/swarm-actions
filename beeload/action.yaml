@@ -97,6 +97,6 @@ runs:
 
           **Preview URL:** ${{ steps.metadata.outputs.bzz-link }}
           **Swarm Hash:** `${{ steps.upload.outputs.reference }}`
-          **Commit Hash:** ${{ github.sha }}
-          **Commit Message:** ${{ github.event.head_commit.message }}
+          **Commit Hash:** ${{ github.event.commits[0].id }}
+          **Commit Message:** ${{ github.event.commits[0].message }}
         edit-mode: replace
