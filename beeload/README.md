@@ -1,6 +1,6 @@
 # beeload
 
-Convert Swarm reference to CID.
+GitHub Actions bundle to upload Pull Requests to Swarm.
 
 ## Getting Started
 
