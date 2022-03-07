@@ -75,6 +75,7 @@ runs:
         echo "::set-output name=bzz-link::$BZZ_LINK_URL"
         echo "Swarm Hash: ${{ steps.upload.outputs.reference }}"
         echo "Bzz link URL: $BZZ_LINK_URL"
+        git log -1 --skip=1
 
     - name: Find preview comment
       if: inputs.preview == 'true' && github.event.pull_request.number
