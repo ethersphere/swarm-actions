@@ -1,0 +1,104 @@
+name: 'beeload'
+description: 'GitHub Actions bundle to upload Pull Requests to Swarm'
+branding:
+  icon: upload-cloud
+  color: orange
+
+inputs:
+  bee-url:
+    description: 'URL of Bee node'
+    required: false
+    default: 'https://api.gateway.ethswarm.org'
+
+  bzz-link-url:
+    description: 'URL of for Bzz.link'
+    required: false
+    default: 'https://<<CID>>.bzz.link'
+
+  postage-batch-id:
+    description: 'Batch ID of Postage Stamp that will be used for upload'
+    required: false
+    default: '0000000000000000000000000000000000000000000000000000000000000000'
+
+  dir:
+    description: 'Path to build directory that should be uploaded. Default: ./build'
+    required: false
+    default: './build'
+
+  preview:
+    description: 'Specifies if PR preview comment should be created for PR branches. Default: false'
+    required: false
+    default: 'false'
+
+  token:
+    description: 'Token to be used for creating the PR comment. Default: GITHUB_TOKEN'
+    required: false
+    default: ${{ github.token }}
+
+  headers:
+    description: 'Headers used for the HTTP call to bee'
+    required: false
+
+outputs:
+  swarm-hash:
+    description: 'Swarm hash of the uploaded content'
+    value: ${{ steps.upload.outputs.reference }}
+
+  url:
+    description: 'Bzz link URL'
+    value: ${{ steps.metadata.outputs.bzz-link }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: upload
+      name: Upload to Swarm
+      uses: ../upload-dir
+      with:
+        bee-url: ${{ inputs.bee-url }}
+        postage-batch-id: ${{ inputs.postage-batch-id }}
+        dir: ${{ inputs.dir }}
+        headers: ${{ inputs.headers }}
+
+    - id: cid
+      name: Convert reference to CID
+      uses: ../reference-to-cid
+      with:
+        reference: ${{ steps.upload.outputs.reference }}
+
+    - id: metadata
+      name: Get metadata
+      shell: bash
+      run: |
+        BZZ_LINK_BASE_URL="${{ inputs.bzz-link-url }}"
+        BZZ_LINK_URL=${BZZ_LINK_BASE_URL/<<CID>>/${{ steps.cid.outputs.cid }}}
+        echo "::set-output name=bzz-link::$BZZ_LINK_URL"
+        echo "::set-output name=git-hash::$(git log -1 --skip=1 --pretty=%H | tr -d '\n')"
+        echo "::set-output name=git-message::$(git log -1 --skip=1 --pretty=%B | tr -d '\n')"
+        echo "Swarm Hash: ${{ steps.upload.outputs.reference }}"
+        echo "Bzz link URL: $BZZ_LINK_URL"
+
+    - name: Find preview comment
+      if: inputs.preview == 'true' && github.event.pull_request.number
+      uses: peter-evans/find-comment@v1
+      id: comment
+      with:
+        token: ${{ inputs.token }}
+        issue-number: ${{ github.event.pull_request.number }}
+        body-includes: PR preview in Swarm
+
+    - name: Create or update preview comment
+      if: inputs.preview == 'true' && github.event.pull_request.number
+      uses: peter-evans/create-or-update-comment@v1
+      with:
+        token: ${{ inputs.token }}
+        comment-id: ${{ steps.comment.outputs.comment-id }}
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          ## 🐝 PR preview in Swarm
+
+          **Preview URL:** ${{ steps.metadata.outputs.bzz-link }}
+          **Swarm Hash:** `${{ steps.upload.outputs.reference }}`
+          **Commit Hash:** ${{ steps.metadata.outputs.git-hash }}
+          **Commit Message:** ${{ steps.metadata.outputs.git-message }}
+        edit-mode: replace

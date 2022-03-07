@@ -40,3 +40,13 @@ jobs:
           echo 'Feed Reference: ${{ steps.feed.outputs.reference }}'
           echo 'Feed Manifest: ${{ steps.feed.outputs.manifest }}'
           echo 'Feed Bzz.link: https://${{ steps.cid.outputs.cid }}.bzz.link'
+
+      - uses: ./beeload
+        id: beeload
+        with:
+          dir: ./upload-dir/dist
+          preview: true
+
+      - run: |
+          echo 'Swarm hash: ${{ steps.beeload.outputs.swarm-hash }}'
+          echo 'Bzz link URL: ${{ steps.beeload.outputs.url }}'
