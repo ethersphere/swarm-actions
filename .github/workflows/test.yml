@@ -41,12 +41,12 @@ jobs:
           echo 'Feed Manifest: ${{ steps.feed.outputs.manifest }}'
           echo 'Feed Bzz.link: https://${{ steps.cid.outputs.cid }}.bzz.link'
 
-      - uses: ./beeload
-        id: beeload
+      - uses: ./pr-preview
+        id: pr-preview
         with:
           dir: ./upload-dir/dist
           preview: true
 
       - run: |
-          echo 'Swarm hash: ${{ steps.beeload.outputs.swarm-hash }}'
-          echo 'Bzz link URL: ${{ steps.beeload.outputs.url }}'
+          echo 'Swarm hash: ${{ steps.pr-preview.outputs.swarm-hash }}'
+          echo 'Bzz link URL: ${{ steps.pr-preview.outputs.url }}'

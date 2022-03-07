@@ -1,4 +1,4 @@
-name: 'beeload'
+name: 'pr-preview'
 description: 'GitHub Actions bundle to upload Pull Requests to Swarm'
 branding:
   icon: upload-cloud
@@ -69,7 +69,7 @@ runs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 2
-        path: beeload-checkout
+        path: pr-preview-checkout
 
     - id: metadata
       name: Get metadata
@@ -78,7 +78,7 @@ runs:
         BZZ_LINK_BASE_URL="${{ inputs.bzz-link-url }}"
         BZZ_LINK_URL=${BZZ_LINK_BASE_URL/<<CID>>/${{ steps.cid.outputs.cid }}}
 
-        cd beeload-checkout
+        cd pr-preview-checkout
 
         echo "::set-output name=bzz-link::$BZZ_LINK_URL"
         echo "::set-output name=git-hash::$(git log -1 --skip=1 --pretty=%H | tr -d '\n')"
@@ -88,7 +88,7 @@ runs:
         echo "Bzz link URL: $BZZ_LINK_URL"
 
         cd ..
-        rm -r beeload-checkout
+        rm -r pr-preview-checkout
 
     - name: Find preview comment
       if: inputs.preview == 'true' && github.event.pull_request.number

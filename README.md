@@ -14,6 +14,6 @@ These actions are meant to be building blocks, and are kept to their minimal for
 
 These bundles are meant to be used as is for more specific and complex use cases.
 
-| Name               | Description                                            |
-| ------------------ | ------------------------------------------------------ |
-| [beeload](beeload) | GitHub Actions bundle to upload Pull Requests to Swarm |
+| Name                     | Description                                            |
+| ------------------------ | ------------------------------------------------------ |
+| [pr-preview](pr-preview) | GitHub Actions bundle to upload Pull Requests to Swarm |

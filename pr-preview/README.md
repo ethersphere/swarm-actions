@@ -1,4 +1,4 @@
-# beeload
+# pr-preview
 
 GitHub Actions bundle to upload Pull Requests to Swarm.
 
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: filoozom/swarm-actions/beeload@v1
+      - uses: filoozom/swarm-actions/pr-preview@v1
         with:
           bee-url: https://api.gateway.ethswarm.org
           postage-batch-id: '0000000000000000000000000000000000000000000000000000000000000000'
