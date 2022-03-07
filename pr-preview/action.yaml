@@ -66,29 +66,28 @@ runs:
       with:
         reference: ${{ steps.upload.outputs.reference }}
 
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 2
-        path: pr-preview-checkout
-
     - id: metadata
       name: Get metadata
       shell: bash
       run: |
         BZZ_LINK_BASE_URL="${{ inputs.bzz-link-url }}"
         BZZ_LINK_URL=${BZZ_LINK_BASE_URL/<<CID>>/${{ steps.cid.outputs.cid }}}
-
-        cd pr-preview-checkout
-
         echo "::set-output name=bzz-link::$BZZ_LINK_URL"
-        echo "::set-output name=git-hash::$(git log -1 --skip=1 --pretty=%H | tr -d '\n')"
-        echo "::set-output name=git-message::$(git log -1 --skip=1 --pretty=%B | tr -d '\n')"
-
         echo "Swarm Hash: ${{ steps.upload.outputs.reference }}"
         echo "Bzz link URL: $BZZ_LINK_URL"
 
-        cd ..
-        rm -r pr-preview-checkout
+    - id: commit
+      name: Fetch commit information
+      uses: actions/github-script@v6
+      with:
+        result-encoding: string
+        script: |
+          const { commit } = await github.rest.git.getCommit({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+	          commit_sha: github.event.pull_request.head.sha
+          });
+          return commit.message
 
     - name: Find preview comment
       if: inputs.preview == 'true' && github.event.pull_request.number
@@ -111,6 +110,6 @@ runs:
 
           **Preview URL:** ${{ steps.metadata.outputs.bzz-link }}
           **Swarm Hash:** `${{ steps.upload.outputs.reference }}`
-          **Commit Hash:** ${{ steps.metadata.outputs.git-hash }}
-          **Commit Message:** ${{ steps.metadata.outputs.git-message }}
+          **Commit Hash:** ${{ github.event.pull_request.head.sha }}
+          **Commit Message:** ${{ steps.commit.outputs.result }}
         edit-mode: replace
