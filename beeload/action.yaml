@@ -51,6 +51,10 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
+
     - id: upload
       name: Upload to Swarm
       uses: filoozom/swarm-actions/upload-dir@v0
@@ -72,10 +76,13 @@ runs:
       run: |
         BZZ_LINK_BASE_URL="${{ inputs.bzz-link-url }}"
         BZZ_LINK_URL=${BZZ_LINK_BASE_URL/<<CID>>/${{ steps.cid.outputs.cid }}}
+
         echo "::set-output name=bzz-link::$BZZ_LINK_URL"
+        echo "::set-output name=git-hash::$(git log -1 --skip=1 --pretty=%H | tr -d '\n')"
+        echo "::set-output name=git-message::$(git log -1 --skip=1 --pretty=%B | tr -d '\n')"
+
         echo "Swarm Hash: ${{ steps.upload.outputs.reference }}"
         echo "Bzz link URL: $BZZ_LINK_URL"
-        git log -1 --skip=1
 
     - name: Find preview comment
       if: inputs.preview == 'true' && github.event.pull_request.number
@@ -98,6 +105,6 @@ runs:
 
           **Preview URL:** ${{ steps.metadata.outputs.bzz-link }}
           **Swarm Hash:** `${{ steps.upload.outputs.reference }}`
-          **Commit Hash:** ${{ github.event.commits[0].id }}
-          **Commit Message:** ${{ github.event.commits[0].message }}
+          **Commit Hash:** ${{ steps.metadata.outputs.git-hash }}
+          **Commit Message:** ${{ steps.metadata.outputs.git-message }}
         edit-mode: replace
