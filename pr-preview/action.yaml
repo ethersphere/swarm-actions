@@ -48,6 +48,7 @@ runs:
   steps:
     - id: upload
       name: Upload to Swarm
+      if: github.event_name == 'pull_request'
       uses: filoozom/swarm-actions/upload-dir@v0
       with:
         bee-url: ${{ inputs.bee-url }}
@@ -57,12 +58,14 @@ runs:
 
     - id: cid
       name: Convert reference to CID
+      if: github.event_name == 'pull_request'
       uses: filoozom/swarm-actions/reference-to-cid@v0
       with:
         reference: ${{ steps.upload.outputs.reference }}
 
     - id: metadata
       name: Get metadata
+      if: github.event_name == 'pull_request'
       shell: bash
       run: |
         BZZ_LINK_BASE_URL="${{ inputs.bzz-link-url }}"
@@ -73,6 +76,7 @@ runs:
 
     - id: commit
       name: Fetch commit information
+      if: github.event_name == 'pull_request'
       uses: actions/github-script@v6
       with:
         result-encoding: string
@@ -85,7 +89,7 @@ runs:
           return data.message
 
     - name: Find preview comment
-      if: github.event.pull_request.number
+      if: github.event_name == 'pull_request'
       uses: peter-evans/find-comment@v1
       id: comment
       with:
@@ -94,7 +98,7 @@ runs:
         body-includes: PR preview in Swarm
 
     - name: Create or update preview comment
-      if: github.event.pull_request.number
+      if: github.event_name == 'pull_request'
       uses: peter-evans/create-or-update-comment@v1
       with:
         token: ${{ inputs.token }}
