@@ -5,7 +5,7 @@
   "description": "GitHub Actions for Swarm",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/filoozom/swarm-actions.git"
+    "url": "git+https://github.com/ethersphere/swarm-actions.git"
   },
   "keywords": [
     "ethersphere",
