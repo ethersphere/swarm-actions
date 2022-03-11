@@ -49,7 +49,7 @@ runs:
     - id: upload
       name: Upload to Swarm
       if: github.event_name == 'pull_request'
-      uses: filoozom/swarm-actions/upload-dir@v0
+      uses: ethersphere/swarm-actions/upload-dir@v0
       with:
         bee-url: ${{ inputs.bee-url }}
         postage-batch-id: ${{ inputs.postage-batch-id }}
@@ -59,7 +59,7 @@ runs:
     - id: cid
       name: Convert reference to CID
       if: github.event_name == 'pull_request'
-      uses: filoozom/swarm-actions/reference-to-cid@v0
+      uses: ethersphere/swarm-actions/reference-to-cid@v0
       with:
         reference: ${{ steps.upload.outputs.reference }}
 

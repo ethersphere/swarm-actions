@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: filoozom/swarm-actions/write-feed@v1
+      - uses: ethersphere/swarm-actions/write-feed@v1
         with:
           bee-url: http://localhost:1633
           postage-batch-id: '0000000000000000000000000000000000000000000000000000000000000000'
