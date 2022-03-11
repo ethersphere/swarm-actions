@@ -9,6 +9,6 @@
     "format": "prettier --write src/*.ts",
     "format-check": "prettier --check src/*.ts",
     "lint": "eslint src/*.ts",
-    "all": "yarn build && yarn format && yarn lint"
+    "all": "npm build && npm format && npm lint"
   }
 }

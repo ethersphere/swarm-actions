@@ -10,8 +10,8 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint **/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
-    "ci:package": "yarn build && yarn package",
-    "all": "yarn build && yarn format && yarn lint && yarn package"
+    "ci:package": "npm build && npm package",
+    "all": "npm build && npm format && npm lint && npm package"
   },
   "dependencies": {
     "swarm-actions-libs": "^0.0.0"

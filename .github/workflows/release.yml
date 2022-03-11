@@ -20,11 +20,11 @@ jobs:
         with:
           node-version: '16'
 
-      - run: yarn install
-      - run: yarn workspaces run all
+      - run: npm install
+      - run: npm run all --workspaces
 
       - id: bump-version
-        run: yarn version --${{ github.event.inputs.bump }} --no-git-tag-version
+        run: npm version ${{ github.event.inputs.bump }} --no-git-tag-version
 
       - id: get-version
         run: |
