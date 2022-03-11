@@ -33,12 +33,12 @@ inputs:
     required: false
     default: 'false'
 
-  errorDocument:
+  error-document:
     description: 'Configure custom error document to be returned when a specified path can not be found in collection.'
     required: false
     default: ''
 
-  indexDocument:
+  index-document:
     description: 'Default file to be returned when the root hash of collection is accessed.'
     required: false
     default: ''

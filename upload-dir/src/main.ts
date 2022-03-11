@@ -28,8 +28,8 @@ const main = async (): Promise<void> => {
   const options: CollectionUploadOptions = {
     deferred: toBoolean(core.getInput('deferred')),
     encrypt: toBoolean(core.getInput('encrypt')),
-    errorDocument: toString(core.getInput('errorDocument')),
-    indexDocument: toString(core.getInput('indexDocument')),
+    errorDocument: toString(core.getInput('error-document')),
+    indexDocument: toString(core.getInput('index-document')),
     pin: toBoolean(core.getInput('pin')),
     retry: toNumber(core.getInput('retry')),
     tag: toNumber(core.getInput('tag')),
