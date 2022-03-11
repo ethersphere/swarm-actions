@@ -38,7 +38,7 @@ jobs:
 
       - uses: EndBug/add-and-commit@v8
         with:
-          add: 'package.json'
+          add: 'package.json package-lock.json'
           default_author: github_actor
           message: 'Bump to v${{ steps.get-version.outputs.version }}'
           push: true
