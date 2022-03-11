@@ -10,8 +10,8 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint **/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
-    "ci:package": "npm build && npm package",
-    "all": "npm build && npm format && npm lint && npm package"
+    "ci:package": "npm run build && npm run package",
+    "all": "npm run build && npm run format && npm run lint && npm run package"
   },
   "dependencies": {
     "@ethersphere/swarm-cid": "0.1.0"
