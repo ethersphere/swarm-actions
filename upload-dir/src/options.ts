@@ -11,7 +11,7 @@ export const toBoolean = (value: string): boolean | undefined => {
     return false
   }
 
-  throw new Error(`Invalid boolean|undefined: ${value}`)
+  throw new Error(`Invalid boolean: ${value}`)
 }
 
 export const toNumber = (value: string): number | undefined => {
