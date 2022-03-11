@@ -34,6 +34,11 @@ inputs:
     description: 'Headers used for the HTTP call to bee'
     required: false
 
+  index-document:
+    description: 'Default file to be returned when the root hash of collection is accessed. By default, index.html is set if the file exists.'
+    required: false
+    default: ''
+
 outputs:
   swarm-hash:
     description: 'Swarm hash of the uploaded content'
@@ -46,15 +51,30 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    - id: index
+      name: Set index document
+      shell: bash
+      run: |
+        if [ "${{ inputs.index-document }}" = "false" ]
+        then
+          echo "::set-output name=document::"
+        elif [ ! -z "${{ inputs.index-document }}" ]
+        then
+          echo "::set-output name=document::${{ inputs.index-document }}"
+        elif [ -f "${{ inputs.dir }}/index.html" ]
+        then
+          echo "::set-output name=document::index.html"
+        fi
+
     - id: upload
       name: Upload to Swarm
-      if: github.event_name == 'pull_request'
       uses: ethersphere/swarm-actions/upload-dir@v0
       with:
         bee-url: ${{ inputs.bee-url }}
         postage-batch-id: ${{ inputs.postage-batch-id }}
         dir: ${{ inputs.dir }}
         headers: ${{ inputs.headers }}
+        index-document: ${{ steps.index.outputs.document }}
 
     - id: cid
       name: Convert reference to CID
