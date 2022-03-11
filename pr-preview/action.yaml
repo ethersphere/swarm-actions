@@ -53,6 +53,7 @@ runs:
   steps:
     - id: index
       name: Set index document
+      if: github.event_name == 'pull_request'
       shell: bash
       run: |
         if [ "${{ inputs.index-document }}" = "false" ]
@@ -68,6 +69,7 @@ runs:
 
     - id: upload
       name: Upload to Swarm
+      if: github.event_name == 'pull_request'
       uses: ethersphere/swarm-actions/upload-dir@v0
       with:
         bee-url: ${{ inputs.bee-url }}
