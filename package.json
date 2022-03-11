@@ -15,8 +15,11 @@
     "actions",
     "typescript"
   ],
-  "author": "Philippe Schommers <philippe@schommers.be>",
-  "license": "MIT",
+  "homepage": "https://github.com/ethersphere/swarm-actions",
+  "bugs": {
+    "url": "https://github.com/ethersphere/swarm-actions/issues/"
+  },
+  "license": "BSD-3-Clause",
   "dependencies": {
     "@actions/core": "1.6.0",
     "@ethersphere/bee-js": "3.3.1"
