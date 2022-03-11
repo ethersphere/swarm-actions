@@ -1,4 +1,8 @@
-export const toBoolean = (value: string): boolean => {
+export const toBoolean = (value: string): boolean | undefined => {
+  if (!value) {
+    return undefined
+  }
+
   if (value === 'true') {
     return true
   }
@@ -7,10 +11,14 @@ export const toBoolean = (value: string): boolean => {
     return false
   }
 
-  throw new Error(`Invalid boolean: ${value}`)
+  throw new Error(`Invalid boolean|undefined: ${value}`)
 }
 
-export const toNumber = (value: string): number => {
+export const toNumber = (value: string): number | undefined => {
+  if (!value) {
+    return undefined
+  }
+
   const number = Number(value)
   if (number.toString() !== value) {
     throw new Error(`Invalid number: ${value}`)
