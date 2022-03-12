@@ -10,8 +10,8 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint **/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
-    "ci:package": "yarn build && yarn package",
-    "all": "yarn build && yarn format && yarn lint && yarn package"
+    "ci:package": "npm run build && npm run package",
+    "all": "npm run build && npm run format && npm run lint && npm run package"
   },
   "dependencies": {
     "ethereumjs-util": "^7.1.4",

@@ -15,8 +15,8 @@ jobs:
         with:
           node-version: '16'
 
-      - run: yarn install
-      - run: yarn workspaces run all
+      - run: npm install
+      - run: npm run all --workspaces
 
       - uses: ./upload-dir
         id: upload
