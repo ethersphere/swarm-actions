@@ -25,14 +25,15 @@ jobs:
 
 ## Inputs
 
-| Name               | Required | Default                                                            | Description                                                         |
-| ------------------ | -------- | ------------------------------------------------------------------ | ------------------------------------------------------------------- |
-| `bee-url`          | `false`  | `https://api.gateway.ethswarm.org`                                 | URL of Bee node                                                     |
-| `bzz-link-url`     | `false`  | `https://<<CID>>.bzz.link`                                         | URL of for Bzz.link                                                 |
-| `postage-batch-id` | `false`  | `0000000000000000000000000000000000000000000000000000000000000000` | Batch ID of Postage Stamp that will be used for upload              |
-| `dir`              | `false`  | `./build`                                                          | Path to build directory that should be uploaded. Default: ./build   |
-| `token`            | `false`  | `GITHUB_TOKEN`                                                     | Token to be used for creating the PR comment. Default: GITHUB_TOKEN |
-| `headers`          | `false`  | -                                                                  | Headers used for the HTTP call to bee                               |
+| Name               | Required | Default                                                            | Description                                                              |
+| ------------------ | -------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| `bee-url`          | `false`  | `https://api.gateway.ethswarm.org`                                 | URL of Bee node                                                          |
+| `bzz-link-url`     | `false`  | `https://<<CID>>.bzz.link`                                         | URL of for Bzz.link                                                      |
+| `postage-batch-id` | `false`  | `0000000000000000000000000000000000000000000000000000000000000000` | Batch ID of Postage Stamp that will be used for upload                   |
+| `dir`              | `false`  | `./build`                                                          | Path to build directory that should be uploaded. Default: ./build        |
+| `token`            | `false`  | `GITHUB_TOKEN`                                                     | Token to be used for creating the PR comment. Default: GITHUB_TOKEN      |
+| `headers`          | `false`  | -                                                                  | Headers used for the HTTP call to bee                                    |
+| `index-document`   | `false`  | `index.html` if it exists                                          | Default file to be returned when the root hash of collection is accessed |
 
 ## Outputs
 
