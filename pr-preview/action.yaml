@@ -39,6 +39,11 @@ inputs:
     required: false
     default: ''
 
+  error-document:
+    description: 'Configure custom error document to be returned when a specified path can not be found in collection.'
+    required: false
+    default: ''
+
 outputs:
   swarm-hash:
     description: 'Swarm hash of the uploaded content'
@@ -77,6 +82,7 @@ runs:
         dir: ${{ inputs.dir }}
         headers: ${{ inputs.headers }}
         index-document: ${{ steps.index.outputs.document }}
+        error-document: ${{ inputs.error-document }}
 
     - id: cid
       name: Convert reference to CID
