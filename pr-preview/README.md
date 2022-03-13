@@ -17,7 +17,6 @@ jobs:
           bee-url: https://api.gateway.ethswarm.org
           postage-batch-id: '0000000000000000000000000000000000000000000000000000000000000000'
           dir: ./dist
-          preview: true
           headers: |
             Authorization: Bearer ...
             X-Header: Value
