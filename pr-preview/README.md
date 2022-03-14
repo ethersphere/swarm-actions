@@ -2,6 +2,8 @@
 
 GitHub Actions bundle to upload Pull Requests to Swarm.
 
+This action will only run when triggered by a Pull Request, and will be entirely skipped on any other trigger.
+
 ## Getting Started
 
 To run this action:
