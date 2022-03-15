@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { Bee, BATCH_ID_HEX_LENGTH, REFERENCE_HEX_LENGTH } from '@ethersphere/bee-js'
+import { Bee, BATCH_ID_HEX_LENGTH, REFERENCE_HEX_LENGTH, BeeResponseError } from '@ethersphere/bee-js'
 import type { BatchId, Reference } from '@ethersphere/bee-js'
 import { privateToAddress, stripHexPrefix } from 'ethereumjs-util'
 import { parseHeaders } from 'swarm-actions-libs'
@@ -29,12 +29,21 @@ const run = async ({
   const signer = stripHexPrefix(signerString)
   const topic = bee.makeFeedTopic(topicString)
 
-  const writer = bee.makeFeedWriter('sequence', topic, signer)
-  const response = await writer.upload(postageBatchId, reference)
-  const manifest = await bee.createFeedManifest(postageBatchId, 'sequence', topic, signerToAddress(signer))
+  try {
+    const writer = bee.makeFeedWriter('sequence', topic, signer)
+    const response = await writer.upload(postageBatchId, reference)
+    const manifest = await bee.createFeedManifest(postageBatchId, 'sequence', topic, signerToAddress(signer))
 
-  core.setOutput('reference', response)
-  core.setOutput('manifest', manifest)
+    core.setOutput('reference', response)
+    core.setOutput('manifest', manifest)
+  } catch (err) {
+    if (err instanceof BeeResponseError && err.status === 409) {
+      core.warning(`feed already points to reference ${reference}`)
+      return
+    }
+
+    throw err
+  }
 }
 
 const main = async (): Promise<void> => {
