@@ -44,6 +44,11 @@ inputs:
     required: false
     default: ''
 
+  deferred:
+    description: 'Determines if the uploaded data should be sent to the network immediately or in a deferred fashion.'
+    required: false
+    default: 'true'
+
 outputs:
   swarm-hash:
     description: 'Swarm hash of the uploaded content'
@@ -83,6 +88,7 @@ runs:
         headers: ${{ inputs.headers }}
         index-document: ${{ steps.index.outputs.document }}
         error-document: ${{ inputs.error-document }}
+        deferred: ${{ inputs.deferred }}
 
     - id: cid
       name: Convert reference to CID
