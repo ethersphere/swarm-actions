@@ -49,6 +49,11 @@ inputs:
     required: false
     default: 'true'
 
+  timeout:
+    description: 'Timeout of requests in milliseconds.'
+    required: false
+    default: ''
+
 outputs:
   swarm-hash:
     description: 'Swarm hash of the uploaded content'
@@ -89,6 +94,7 @@ runs:
         index-document: ${{ steps.index.outputs.document }}
         error-document: ${{ inputs.error-document }}
         deferred: ${{ inputs.deferred }}
+        timeout: ${{ inputs.timeout }}
 
     - id: cid
       name: Convert reference to CID
