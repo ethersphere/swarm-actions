@@ -36,6 +36,7 @@ jobs:
 | `headers`          | `false`  | -                                                                  | Headers used for the HTTP call to bee                                                               |
 | `index-document`   | `false`  | `index.html` if it exists                                          | Default file to be returned when the root hash of collection is accessed                            |
 | `error-document`   | `false`  | -                                                                  | Configure custom error document to be returned when a specified path can not be found in collection |
+| `timeout`          | `false`  | `undefined`                                                        | Timeout of requests in milliseconds.                                                                |
 
 ## Outputs
 
