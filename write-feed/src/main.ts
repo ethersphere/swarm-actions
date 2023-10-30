@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
-import { Bee, BATCH_ID_HEX_LENGTH, REFERENCE_HEX_LENGTH, BeeResponseError } from '@ethersphere/bee-js'
 import type { BatchId, Reference } from '@ethersphere/bee-js'
+import { BATCH_ID_HEX_LENGTH, Bee, REFERENCE_HEX_LENGTH } from '@ethersphere/bee-js'
 import { privateToAddress, stripHexPrefix } from 'ethereumjs-util'
 import { parseHeaders } from 'swarm-actions-libs'
 
@@ -25,7 +25,7 @@ const run = async ({
   reference,
   headers,
 }: Inputs): Promise<void> => {
-  const bee = new Bee(beeUrl, { defaultHeaders: headers })
+  const bee = new Bee(beeUrl, { headers })
   const signer = stripHexPrefix(signerString)
   const topic = bee.makeFeedTopic(topicString)
 
@@ -36,8 +36,8 @@ const run = async ({
 
     core.setOutput('reference', response)
     core.setOutput('manifest', manifest)
-  } catch (err) {
-    if (err instanceof BeeResponseError && err.status === 409) {
+  } catch (err: any) {
+    if (err.status === 409) {
       core.warning(`feed already points to reference ${reference}`)
       return
     }
