@@ -1,8 +1,8 @@
 import * as core from '@actions/core'
-import { Bee, BATCH_ID_HEX_LENGTH } from '@ethersphere/bee-js'
-import type { BatchId, CollectionUploadOptions } from '@ethersphere/bee-js'
+import type { BatchId, BeeRequestOptions, CollectionUploadOptions } from '@ethersphere/bee-js'
+import { BATCH_ID_HEX_LENGTH, Bee } from '@ethersphere/bee-js'
 import { parseHeaders } from 'swarm-actions-libs'
-import { toNumber, toBoolean, toString } from './options'
+import { toBoolean, toNumber, toString } from './options'
 
 type Inputs = {
   beeUrl: string
@@ -10,11 +10,12 @@ type Inputs = {
   dir: string
   headers: Record<string, string>
   options: CollectionUploadOptions
+  requestOptions: BeeRequestOptions
 }
 
-const run = async ({ beeUrl, postageBatchId, dir, headers, options }: Inputs): Promise<void> => {
-  const bee = new Bee(beeUrl, { defaultHeaders: headers })
-  const { reference, tagUid } = await bee.uploadFilesFromDirectory(postageBatchId, dir, options)
+const run = async ({ beeUrl, postageBatchId, dir, headers, options, requestOptions }: Inputs): Promise<void> => {
+  const bee = new Bee(beeUrl, { headers })
+  const { reference, tagUid } = await bee.uploadFilesFromDirectory(postageBatchId, dir, options, requestOptions)
   core.setOutput('reference', reference)
   core.setOutput('tagUid', tagUid)
 }
@@ -31,8 +32,11 @@ const main = async (): Promise<void> => {
     errorDocument: toString(core.getInput('error-document')),
     indexDocument: toString(core.getInput('index-document')),
     pin: toBoolean(core.getInput('pin')),
-    retry: toNumber(core.getInput('retry')),
     tag: toNumber(core.getInput('tag')),
+  }
+
+  const requestOptions: BeeRequestOptions = {
+    retry: toNumber(core.getInput('retry')),
     timeout: toNumber(core.getInput('timeout')),
   }
 
@@ -42,6 +46,7 @@ const main = async (): Promise<void> => {
     postageBatchId: postageBatchId as BatchId,
     headers: parseHeaders(core.getInput('headers')),
     options,
+    requestOptions,
   })
 }
 
