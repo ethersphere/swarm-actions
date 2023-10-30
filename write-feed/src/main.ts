@@ -37,7 +37,7 @@ const run = async ({
     core.setOutput('reference', response)
     core.setOutput('manifest', manifest)
   } catch (err) {
-    if (err && Reflect.get(err, 'status') === 409) {
+    if ((err as any).status === 409) {
       core.warning(`feed already points to reference ${reference}`)
       return
     }
