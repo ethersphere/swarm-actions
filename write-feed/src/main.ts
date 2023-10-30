@@ -29,21 +29,12 @@ const run = async ({
   const signer = stripHexPrefix(signerString)
   const topic = bee.makeFeedTopic(topicString)
 
-  try {
-    const writer = bee.makeFeedWriter('sequence', topic, signer)
-    const response = await writer.upload(postageBatchId, reference)
-    const manifest = await bee.createFeedManifest(postageBatchId, 'sequence', topic, signerToAddress(signer))
+  const writer = bee.makeFeedWriter('sequence', topic, signer)
+  const response = await writer.upload(postageBatchId, reference)
+  const manifest = await bee.createFeedManifest(postageBatchId, 'sequence', topic, signerToAddress(signer))
 
-    core.setOutput('reference', response)
-    core.setOutput('manifest', manifest)
-  } catch (err) {
-    if ((err as any).status === 409) {
-      core.warning(`feed already points to reference ${reference}`)
-      return
-    }
-
-    throw err
-  }
+  core.setOutput('reference', response)
+  core.setOutput('manifest', manifest)
 }
 
 const main = async (): Promise<void> => {
