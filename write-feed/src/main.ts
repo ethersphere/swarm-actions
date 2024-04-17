@@ -34,7 +34,7 @@ const run = async ({
   const manifest = await bee.createFeedManifest(postageBatchId, 'sequence', topic, signerToAddress(signer))
 
   core.setOutput('reference', response)
-  core.setOutput('manifest', manifest)
+  core.setOutput('manifest', manifest.reference)
 }
 
 const main = async (): Promise<void> => {
