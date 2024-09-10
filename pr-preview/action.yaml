@@ -73,13 +73,15 @@ runs:
       run: |
         if [ "${{ inputs.index-document }}" = "false" ]
         then
-          echo "::set-output name=document::"
+          # Do nothing (equivalent to setting document to empty string)
         elif [ ! -z "${{ inputs.index-document }}" ]
         then
-          echo "::set-output name=document::${{ inputs.index-document }}"
+          # Set document to the specified value
+          echo "document=${{ inputs.index-document }}" >> $GITHUB_OUTPUT
         elif [ -f "${{ inputs.dir }}/index.html" ]
         then
-          echo "::set-output name=document::index.html"
+          # Set document to "index.html"
+          echo "document=index.html" >> $GITHUB_OUTPUT
         fi
 
     - id: upload
@@ -108,10 +110,9 @@ runs:
       if: github.event_name == 'pull_request'
       shell: bash
       run: |
-        BZZ_LINK_BASE_URL="${{ inputs.bzz-link-url }}"
-        BZZ_LINK_URL=${BZZ_LINK_BASE_URL/<<CID>>/${{ steps.cid.outputs.cid }}}
-        echo "::set-output name=bzz-link::$BZZ_LINK_URL"
-        echo "Swarm Hash: ${{ steps.upload.outputs.reference }}"
+        BZZ_LINK_BASE_URL="${{ inputs.bzz-link-url }}"  # Access input directly
+        BZZ_LINK_URL=${BZZ_LINK_BASE_URL/<<CID>>/${{ steps.cid.outputs.cid }}}  # Use step output directly
+        echo "Swarm Hash: ${{ steps.upload.outputs.reference }}"  # Use step output directly
         echo "Bzz link URL: $BZZ_LINK_URL"
 
     - id: commit
@@ -142,13 +143,14 @@ runs:
       uses: peter-evans/create-or-update-comment@v1
       with:
         token: ${{ inputs.token }}
-        comment-id: ${{ steps.comment.outputs.comment-id }}
+        comment-id: ${{ steps.comment.outputs.comment-id   
+ }  }  # Likely uses step output directly
         issue-number: ${{ github.event.pull_request.number }}
         body: |
           ## 🐝 PR preview in Swarm
 
           **Preview URL:** ${{ steps.metadata.outputs.bzz-link }}
-          **Swarm Hash:** `${{ steps.upload.outputs.reference }}`
+          **Swarm Hash:** `${{ steps.upload.outputs.reference }}
           **Commit Hash:** ${{ github.event.pull_request.head.sha }}
           **Commit Message:** ${{ steps.commit.outputs.result }}
-        edit-mode: replace
+          edit-mode: replace

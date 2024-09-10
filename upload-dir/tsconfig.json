@@ -1,7 +1,10 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
+    "lib": ["es2022"],
+    "module": "node16",
+    "target": "es2021",
     "outDir": "./build",
-    "rootDir": "./src",
+    "rootDir": "./src"
   }
 }

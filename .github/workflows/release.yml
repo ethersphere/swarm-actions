@@ -15,11 +15,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
 
       - run: npm install
       - run: npm run all --workspaces
@@ -33,9 +33,9 @@ jobs:
           MAJOR=$(node -pe "require('./package.json')['version'].split('.')[0]")
           MINOR=$(node -pe "require('./package.json')['version'].split('.').slice(0, 2).join('.')")
 
-          echo ::set-output name=version::$VERSION
-          echo ::set-output name=major::$MAJOR
-          echo ::set-output name=minor::$MINOR
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "major=$MAJOR" >> $GITHUB_OUTPUT
+          echo "minor=$MINOR" >> $GITHUB_OUTPUT
 
       - uses: EndBug/add-and-commit@v9
         with:

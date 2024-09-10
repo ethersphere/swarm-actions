@@ -1,9 +1,13 @@
 {
-  "extends": "@tsconfig/node16/tsconfig.json",
+  "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
+    "lib": ["es2023"],
+    "module": "node16",
+    "target": "es2022",
+
     "strict": true,
-    "target": "es2021",
-    "module": "CommonJS",
-    "moduleResolution": "node",
-  },
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node16"
+  }
 }

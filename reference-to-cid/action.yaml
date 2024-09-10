@@ -13,5 +13,5 @@ outputs:
     description: 'Content ID corresponding to reference'
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
