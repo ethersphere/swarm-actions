@@ -71,5 +71,5 @@ outputs:
     description: "Automatically created tag's UID"
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'

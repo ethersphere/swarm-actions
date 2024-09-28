@@ -39,5 +39,5 @@ outputs:
     description: 'Reference to the feed manifest chunk'
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
