@@ -150,7 +150,7 @@ runs:
           ## 🐝 PR preview in Swarm
 
           **Preview URL:** ${{ steps.metadata.outputs.bzz-link }}
-          **Swarm Hash:** `${{ steps.upload.outputs.reference }}
+          **Swarm Hash:** `${{ steps.upload.outputs.reference }}`
           **Commit Hash:** ${{ github.event.pull_request.head.sha }}
           **Commit Message:** ${{ steps.commit.outputs.result }}
           edit-mode: replace
