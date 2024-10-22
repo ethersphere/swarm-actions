@@ -143,8 +143,7 @@ runs:
       uses: peter-evans/create-or-update-comment@v1
       with:
         token: ${{ inputs.token }}
-        comment-id: ${{ steps.comment.outputs.comment-id   
- }  }  # Likely uses step output directly
+        comment-id: ${{ steps.comment.outputs.comment-id }}
         issue-number: ${{ github.event.pull_request.number }}
         body: |
           ## 🐝 PR preview in Swarm
