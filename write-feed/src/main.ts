@@ -1,8 +1,8 @@
 import * as core from '@actions/core'
 import type { BatchId, Reference } from '@ethersphere/bee-js'
-import { BATCH_ID_HEX_LENGTH, Bee, REFERENCE_HEX_LENGTH } from '@ethersphere/bee-js'
-import { privateToAddress, stripHexPrefix } from 'ethereumjs-util'
-import { parseHeaders } from 'swarm-actions-libs'
+import { Bee } from '@ethersphere/bee-js'
+import { Objects, Types } from 'cafe-utility'
+import { privateToAddress } from 'ethereumjs-util'
 
 type Inputs = {
   beeUrl: string
@@ -17,44 +17,41 @@ const signerToAddress = (signer: string): string => {
   return privateToAddress(Buffer.from(signer, 'hex')).toString('hex')
 }
 
-const run = async ({
-  beeUrl,
-  postageBatchId,
-  topic: topicString,
-  signer: signerString,
-  reference,
-  headers,
-}: Inputs): Promise<void> => {
-  const bee = new Bee(beeUrl, { headers })
-  const signer = stripHexPrefix(signerString)
-  const topic = bee.makeFeedTopic(topicString)
+async function run(inputs: Inputs) {
+  const bee = new Bee(inputs.beeUrl, { headers: inputs.headers })
+  const topic = bee.makeFeedTopic(inputs.topic)
 
-  const writer = bee.makeFeedWriter('sequence', topic, signer)
-  const response = await writer.upload(postageBatchId, reference)
-  const manifest = await bee.createFeedManifest(postageBatchId, 'sequence', topic, signerToAddress(signer))
+  const writer = bee.makeFeedWriter('sequence', topic, inputs.signer)
+  const response = await writer.upload(inputs.postageBatchId, inputs.reference)
+  const manifest = await bee.createFeedManifest(
+    inputs.postageBatchId,
+    'sequence',
+    topic,
+    signerToAddress(inputs.signer)
+  )
 
   core.setOutput('reference', response)
   core.setOutput('manifest', manifest.reference)
 }
 
-const main = async (): Promise<void> => {
-  const postageBatchId = core.getInput('postage-batch-id', { required: true })
-  if (postageBatchId.length !== BATCH_ID_HEX_LENGTH) {
-    throw new Error(`postage-batch-id must be ${BATCH_ID_HEX_LENGTH} characters long`)
-  }
+async function main() {
+  const postageBatchId = Types.asHexString(core.getInput('postage-batch-id', { required: true }), {
+    name: 'postage-batch-id',
+    byteLength: 32,
+  }) as BatchId
 
-  const reference = core.getInput('reference', { required: true })
-  if (reference.length !== REFERENCE_HEX_LENGTH) {
-    throw new Error(`reference must be ${REFERENCE_HEX_LENGTH} characters long`)
-  }
+  const reference = Types.asHexString(core.getInput('reference', { required: true }), {
+    name: 'reference',
+    byteLength: 32,
+  }) as Reference
 
   return run({
     beeUrl: core.getInput('bee-url', { required: true }),
-    signer: core.getInput('signer', { required: true }),
+    signer: Types.asHexString(core.getInput('signer', { required: true }), { name: 'signer', byteLength: 32 }),
     topic: core.getInput('topic', { required: true }),
-    postageBatchId: postageBatchId as BatchId,
-    reference: reference as Reference,
-    headers: parseHeaders(core.getInput('headers')),
+    postageBatchId,
+    reference,
+    headers: Objects.parseKeyValues(core.getMultilineInput('headers')),
   })
 }
 

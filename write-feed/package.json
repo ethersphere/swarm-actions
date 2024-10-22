@@ -14,7 +14,6 @@
     "all": "npm run build && npm run format && npm run lint && npm run package"
   },
   "dependencies": {
-    "ethereumjs-util": "^7.1.4",
-    "swarm-actions-libs": "^0.0.0"
+    "ethereumjs-util": "^7.1.4"
   }
 }

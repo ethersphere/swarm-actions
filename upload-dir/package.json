@@ -12,8 +12,5 @@
     "package": "ncc build --source-map --license licenses.txt",
     "ci:package": "npm run build && npm run package",
     "all": "npm run build && npm run format && npm run lint && npm run package"
-  },
-  "dependencies": {
-    "swarm-actions-libs": "^0.0.0"
   }
 }
