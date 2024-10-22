@@ -25,5 +25,3 @@ export const toNumber = (value: string): number | undefined => {
   }
   return number
 }
-
-export const toString = (value: string): string => value
