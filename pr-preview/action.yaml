@@ -74,6 +74,7 @@ runs:
         if [ "${{ inputs.index-document }}" = "false" ]
         then
           # Do nothing (equivalent to setting document to empty string)
+          :
         elif [ ! -z "${{ inputs.index-document }}" ]
         then
           # Set document to the specified value
