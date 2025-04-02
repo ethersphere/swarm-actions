@@ -32,12 +32,7 @@ async function main() {
     })
   )
 
-  const reference = new Reference(
-    Types.asHexString(core.getInput('reference', { required: true }), {
-      name: 'reference',
-      byteLength: 32,
-    })
-  )
+  const reference = new Reference(core.getInput('reference', { required: true }))
 
   return run({
     beeUrl: core.getInput('bee-url', { required: true }),
