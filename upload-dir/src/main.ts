@@ -20,7 +20,7 @@ async function run(inputs: Inputs) {
     inputs.options,
     inputs.requestOptions
   )
-  core.setOutput('reference', reference)
+  core.setOutput('reference', reference.toHex())
   core.setOutput('tagUid', tagUid)
 }
 
