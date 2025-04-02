@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
-import type { BatchId, BeeRequestOptions, CollectionUploadOptions } from '@ethersphere/bee-js'
-import { Bee } from '@ethersphere/bee-js'
+import { BatchId, Bee, BeeRequestOptions, CollectionUploadOptions } from '@ethersphere/bee-js'
 import { Objects, Types } from 'cafe-utility'
 import { toBoolean, toNumber } from './options'
 
@@ -26,10 +25,12 @@ async function run(inputs: Inputs) {
 }
 
 async function main() {
-  const postageBatchId = Types.asHexString(core.getInput('postage-batch-id', { required: true }), {
-    name: 'postage-batch-id',
-    byteLength: 32,
-  }) as BatchId
+  const postageBatchId = new BatchId(
+    Types.asHexString(core.getInput('postage-batch-id', { required: true }), {
+      name: 'postage-batch-id',
+      byteLength: 32,
+    })
+  )
 
   const options: CollectionUploadOptions = {
     deferred: toBoolean(core.getInput('deferred')),
