@@ -41,7 +41,7 @@ async function main() {
     tag: toNumber(core.getInput('tag')),
   }
 
-  Objects.removeEmptyValues(options)
+  Objects.removeEmptyValues(options as Record<string, unknown>)
 
   const requestOptions: BeeRequestOptions = {
     timeout: toNumber(core.getInput('timeout')),
