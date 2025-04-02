@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
-import type { BatchId, BeeRequestOptions, CollectionUploadOptions } from '@ethersphere/bee-js'
-import { Bee } from '@ethersphere/bee-js'
+import { BatchId, Bee, BeeRequestOptions, CollectionUploadOptions } from '@ethersphere/bee-js'
 import { Objects, Types } from 'cafe-utility'
 import { toBoolean, toNumber } from './options'
 
@@ -21,15 +20,17 @@ async function run(inputs: Inputs) {
     inputs.options,
     inputs.requestOptions
   )
-  core.setOutput('reference', reference)
+  core.setOutput('reference', reference.toHex())
   core.setOutput('tagUid', tagUid)
 }
 
 async function main() {
-  const postageBatchId = Types.asHexString(core.getInput('postage-batch-id', { required: true }), {
-    name: 'postage-batch-id',
-    byteLength: 32,
-  }) as BatchId
+  const postageBatchId = new BatchId(
+    Types.asHexString(core.getInput('postage-batch-id', { required: true }), {
+      name: 'postage-batch-id',
+      byteLength: 32,
+    })
+  )
 
   const options: CollectionUploadOptions = {
     deferred: toBoolean(core.getInput('deferred')),
@@ -39,6 +40,8 @@ async function main() {
     pin: toBoolean(core.getInput('pin')),
     tag: toNumber(core.getInput('tag')),
   }
+
+  Objects.removeEmptyValues(options as Record<string, unknown>)
 
   const requestOptions: BeeRequestOptions = {
     timeout: toNumber(core.getInput('timeout')),

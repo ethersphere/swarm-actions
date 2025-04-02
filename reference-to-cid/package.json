@@ -14,6 +14,6 @@
     "all": "npm run build && npm run format && npm run lint && npm run package"
   },
   "dependencies": {
-    "@ethersphere/swarm-cid": "0.1.0"
+    "@ethersphere/bee-js": "^9.1.0"
   }
 }

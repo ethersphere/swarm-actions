@@ -1,8 +1,6 @@
 import * as core from '@actions/core'
-import type { BatchId, Reference } from '@ethersphere/bee-js'
-import { Bee } from '@ethersphere/bee-js'
+import { BatchId, Bee, PrivateKey, Reference, Topic } from '@ethersphere/bee-js'
 import { Objects, Types } from 'cafe-utility'
-import { privateToAddress } from 'ethereumjs-util'
 
 type Inputs = {
   beeUrl: string
@@ -13,37 +11,28 @@ type Inputs = {
   headers: Record<string, string>
 }
 
-const signerToAddress = (signer: string): string => {
-  return privateToAddress(Buffer.from(signer, 'hex')).toString('hex')
-}
-
 async function run(inputs: Inputs) {
   const bee = new Bee(inputs.beeUrl, { headers: inputs.headers })
-  const topic = bee.makeFeedTopic(inputs.topic)
+  const topic = Topic.fromString(inputs.topic)
 
-  const writer = bee.makeFeedWriter('sequence', topic, inputs.signer)
-  const response = await writer.upload(inputs.postageBatchId, inputs.reference)
-  const manifest = await bee.createFeedManifest(
-    inputs.postageBatchId,
-    'sequence',
-    topic,
-    signerToAddress(inputs.signer)
-  )
+  const signer = new PrivateKey(inputs.signer)
+  const writer = bee.makeFeedWriter(topic, inputs.signer)
+  const response = await writer.uploadReference(inputs.postageBatchId, inputs.reference)
+  const manifest = await bee.createFeedManifest(inputs.postageBatchId, topic, signer.publicKey().address())
 
-  core.setOutput('reference', response)
-  core.setOutput('manifest', manifest.reference)
+  core.setOutput('reference', response.reference.toHex())
+  core.setOutput('manifest', manifest.toHex())
 }
 
 async function main() {
-  const postageBatchId = Types.asHexString(core.getInput('postage-batch-id', { required: true }), {
-    name: 'postage-batch-id',
-    byteLength: 32,
-  }) as BatchId
+  const postageBatchId = new BatchId(
+    Types.asHexString(core.getInput('postage-batch-id', { required: true }), {
+      name: 'postage-batch-id',
+      byteLength: 32,
+    })
+  )
 
-  const reference = Types.asHexString(core.getInput('reference', { required: true }), {
-    name: 'reference',
-    byteLength: 32,
-  }) as Reference
+  const reference = new Reference(core.getInput('reference', { required: true }))
 
   return run({
     beeUrl: core.getInput('bee-url', { required: true }),
