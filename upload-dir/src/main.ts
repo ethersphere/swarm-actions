@@ -32,18 +32,18 @@ async function main() {
   )
 
   const options: CollectionUploadOptions = {
-    deferred: Types.asOptional((x) => Types.asBoolean(x, { name: 'deferred' }), core.getInput('deferred')),
-    encrypt: Types.asOptional((x) => Types.asBoolean(x, { name: 'encrypt' }), core.getInput('encrypt')),
+    deferred: Types.asEmptiable((x) => Types.asBoolean(x, { name: 'deferred' }), core.getInput('deferred')),
+    encrypt: Types.asEmptiable((x) => Types.asBoolean(x, { name: 'encrypt' }), core.getInput('encrypt')),
     errorDocument: core.getInput('error-document'),
     indexDocument: core.getInput('index-document'),
-    pin: Types.asOptional((x) => Types.asBoolean(x, { name: 'pin' }), core.getInput('pin')),
-    tag: Types.asOptional((x) => Types.asNumber(x, { name: 'tag' }), core.getInput('tag')),
+    pin: Types.asEmptiable((x) => Types.asBoolean(x, { name: 'pin' }), core.getInput('pin')),
+    tag: Types.asEmptiable((x) => Types.asNumber(x, { name: 'tag' }), core.getInput('tag')),
   }
 
   Objects.removeEmptyValues(options as Record<string, unknown>)
 
   const requestOptions: BeeRequestOptions = {
-    timeout: Types.asOptional((x) => Types.asNumber(x, { name: 'timeout' }), core.getInput('timeout')),
+    timeout: Types.asEmptiable((x) => Types.asNumber(x, { name: 'timeout' }), core.getInput('timeout')),
   }
 
   return run({

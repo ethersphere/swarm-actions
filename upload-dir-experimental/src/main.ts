@@ -33,7 +33,7 @@ async function main() {
   )
 
   const options: CollectionUploadOptions = {
-    deferred: Types.asOptional((x) => Types.asBoolean(x, { name: 'deferred' }), core.getInput('deferred')),
+    deferred: Types.asEmptiable((x) => Types.asBoolean(x, { name: 'deferred' }), core.getInput('deferred')),
     errorDocument: core.getInput('error-document'),
     indexDocument: core.getInput('index-document'),
   }
@@ -41,7 +41,7 @@ async function main() {
   Objects.removeEmptyValues(options as Record<string, unknown>)
 
   const requestOptions: BeeRequestOptions = {
-    timeout: Types.asOptional((x) => Types.asNumber(x, { name: 'timeout' }), core.getInput('timeout')),
+    timeout: Types.asEmptiable((x) => Types.asNumber(x, { name: 'timeout' }), core.getInput('timeout')),
   }
 
   return run({
