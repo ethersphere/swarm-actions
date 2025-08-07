@@ -1,0 +1,70 @@
+name: 'Upload directories to Swarm'
+description: 'Upload directories to Swarm using GitHub Actions'
+branding:
+  icon: upload-cloud
+  color: orange
+
+inputs:
+  bee-url:
+    description: 'URL of Bee node.'
+    required: false
+    default: 'https://api.gateway.ethswarm.org'
+
+  postage-batch-id:
+    description: 'Batch ID of Postage Stamp that will be used for upload.'
+    required: false
+    default: '0000000000000000000000000000000000000000000000000000000000000000'
+
+  dir:
+    description: 'Path to directory that should be uploaded.'
+    required: false
+
+  headers:
+    description: 'Headers used for the HTTP call to bee.'
+    required: false
+
+  deferred:
+    description: 'Determines if the uploaded data should be sent to the network immediately or in a deferred fashion.'
+    required: false
+    default: 'true'
+
+  error-document:
+    description: 'Configure custom error document to be returned when a specified path can not be found in collection.'
+    required: false
+    default: ''
+
+  index-document:
+    description: 'Default file to be returned when the root hash of collection is accessed.'
+    required: false
+    default: ''
+
+  pin:
+    description: 'Will pin the data locally in the Bee node as well.'
+    required: false
+    default: 'false'
+
+  retry:
+    description: 'Configure backoff mechanism for requests retries. Specifies how many retries will be performed before failing a request.'
+    required: false
+    default: '2'
+
+  tag:
+    description: 'Tags keep track of syncing the data with network. This option allows attach existing Tag UUID to the uploaded data.'
+    required: false
+    default: ''
+
+  timeout:
+    description: 'Timeout of requests in milliseconds.'
+    required: false
+    default: ''
+
+outputs:
+  reference:
+    description: 'Swarm hash of the uploaded content'
+
+  tagUid:
+    description: "Automatically created tag's UID"
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

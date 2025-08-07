@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "upload-dir-experimental",
+  "version": "0.0.0",
+  "description": "Upload directories to Swarm (Experimental)",
+  "main": "build/main.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint **/*.ts",
+    "package": "ncc build --source-map --license licenses.txt",
+    "ci:package": "npm run build && npm run package",
+    "all": "npm run build && npm run format && npm run lint && npm run package"
+  }
+}
