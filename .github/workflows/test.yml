@@ -87,41 +87,41 @@ jobs:
         run: |
           swarm-cli download ${{ steps.upload.outputs.reference }}/css/main.bundle.min.4e55be0357e7dec25cf1bea80877847773ee67f75d09281900b7bd8c8d07b4cded5555fb3b9c01a3826e021712d0fd63866586c0aa832ebb86de60c217a2f288.css --bee-api-url https://api.gateway.ethswarm.org
 
-    test-experimental-flags:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
+  test-experimental-flags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-        - name: Setup Node.js
-          uses: actions/setup-node@v4
-          with:
-            node-version: '20'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-        - name: Install dependencies
-          run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-        - name: Install swarm-cli
-          run: npm install --global @ethersphere/swarm-cli
+      - name: Install swarm-cli
+        run: npm install --global @ethersphere/swarm-cli
 
-        - name: Run all workspaces
-          run: npm run all --workspaces
+      - name: Run all workspaces
+        run: npm run all --workspaces
 
-        - name: Create test directory with sample files
-          run: |
-            mkdir -p test-dir
-            echo "<h1>Swarm Actions Test</h1>" > test-dir/hello.html
+      - name: Create test directory with sample files
+        run: |
+          mkdir -p test-dir
+          echo "<h1>Swarm Actions Test</h1>" > test-dir/hello.html
 
-        - name: Upload experimentally with index and error documents
-          uses: ./upload-dir-experimental
-          id: upload
-          with:
-            dir: ./test-dir
-            index-document: hello.html
-            error-document: error.html
+      - name: Upload experimentally with index and error documents
+        uses: ./upload-dir-experimental
+        id: upload
+        with:
+          dir: ./test-dir
+          index-document: hello.html
+          error-document: error.html
 
-        - name: Verify index and error document metadata
-          run: |
-            npx npxie eval-and-expect \
-              "swarm-cli manifest list --verbose ${{ steps.upload.outputs.reference }} --bee-api-url https://api.gateway.ethswarm.org" \
-              "website-index-document: hello.html\nwebsite-error-document: error.html"
+      - name: Verify index and error document metadata
+        run: |
+          npx npxie eval-and-expect \
+            "swarm-cli manifest list --verbose ${{ steps.upload.outputs.reference }} --bee-api-url https://api.gateway.ethswarm.org" \
+            "website-index-document: hello.html\nwebsite-error-document: error.html"
