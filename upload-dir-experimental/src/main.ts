@@ -13,9 +13,10 @@ type Inputs = {
 
 async function run(inputs: Inputs) {
   const bee = new Bee(inputs.beeUrl, { headers: inputs.headers })
-  const { reference, tagUid } = await bee.uploadFilesFromDirectory(
+  const { reference, tagUid } = await bee.streamDirectory(
     inputs.postageBatchId,
     inputs.dir,
+    (progress) => core.info(`Upload progress: ${progress.processed} / ${progress.total}`),
     inputs.options,
     inputs.requestOptions
   )
@@ -33,11 +34,8 @@ async function main() {
 
   const options: CollectionUploadOptions = {
     deferred: Types.asEmptiable((x) => Types.asBoolean(x, { name: 'deferred' }), core.getInput('deferred')),
-    encrypt: Types.asEmptiable((x) => Types.asBoolean(x, { name: 'encrypt' }), core.getInput('encrypt')),
     errorDocument: core.getInput('error-document'),
     indexDocument: core.getInput('index-document'),
-    pin: Types.asEmptiable((x) => Types.asBoolean(x, { name: 'pin' }), core.getInput('pin')),
-    tag: Types.asEmptiable((x) => Types.asNumber(x, { name: 'tag' }), core.getInput('tag')),
   }
 
   Objects.removeEmptyValues(options as Record<string, unknown>)

@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "reference-to-cid",
+  "name": "upload-dir-experimental",
   "version": "0.0.0",
-  "description": "Convert Swarm reference to CID",
+  "description": "Upload directories to Swarm (Experimental)",
   "main": "build/main.js",
   "scripts": {
     "build": "tsc",
@@ -12,8 +12,5 @@
     "package": "ncc build --source-map --license licenses.txt",
     "ci:package": "npm run build && npm run package",
     "all": "npm run build && npm run format && npm run lint && npm run package"
-  },
-  "dependencies": {
-    "@ethersphere/bee-js": "^9.7.1"
   }
 }
