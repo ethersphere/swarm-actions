@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import { BatchId, Bee, BeeRequestOptions, CollectionUploadOptions } from '@ethersphere/bee-js'
-import { Objects, Types } from 'cafe-utility'
+import { Dates, Objects, Types } from 'cafe-utility'
 
 type Inputs = {
   beeUrl: string
@@ -13,12 +13,13 @@ type Inputs = {
 
 async function run(inputs: Inputs) {
   const bee = new Bee(inputs.beeUrl, { headers: inputs.headers })
+  const startedAt = Date.now()
   const { reference, tagUid } = await bee.streamDirectory(
     inputs.postageBatchId,
     inputs.dir,
     (progress) => {
-      if (progress.processed % 100 === 0) {
-        core.info(`Upload progress: ${progress.processed} / ${progress.total}`)
+      if (progress.processed % 200 === 0) {
+        core.info(Dates.humanizeProgress(Dates.getProgress(startedAt, progress.processed, progress.total)))
       }
     },
     inputs.options,
