@@ -16,7 +16,11 @@ async function run(inputs: Inputs) {
   const { reference, tagUid } = await bee.streamDirectory(
     inputs.postageBatchId,
     inputs.dir,
-    (progress) => core.info(`Upload progress: ${progress.processed} / ${progress.total}`),
+    (progress) => {
+      if (progress.processed % 100 === 0) {
+        core.info(`Upload progress: ${progress.processed} / ${progress.total}`)
+      }
+    },
     inputs.options,
     inputs.requestOptions
   )
