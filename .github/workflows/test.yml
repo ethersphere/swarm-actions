@@ -136,4 +136,4 @@ jobs:
             "website-error-document: error.html"
 
       - name: Verify HTTP 200 for bzz endpoint
-        run: npx npxie code-equals "https://bzz.limo/${{ steps.upload.outputs.reference }}/" 200
+        run: npx npxie code-equals "https://bzz.limo/bzz/${{ steps.upload.outputs.reference }}/" 200
