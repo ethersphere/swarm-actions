@@ -127,7 +127,7 @@ jobs:
         run: |
           npx npxie eval-and-expect \
             "swarm-cli manifest list --verbose ${{ steps.upload.outputs.reference }} --bee-api-url https://api.gateway.ethswarm.org" \
-            "website-index-document: hello.html\nwebsite-error-document: error.html"
+            "website-error-document: error.html\nwebsite-index-document: hello.html"
 
       - name: Verify HTTP 200 for bzz endpoint
         run: npx npxie code-equals "https://api.gateway.ethswarm.org/bzz/${{ steps.upload.outputs.reference }}/" 200
