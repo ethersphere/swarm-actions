@@ -123,11 +123,17 @@ jobs:
           index-document: hello.html
           error-document: error.html
 
-      - name: Verify index and error document metadata
+      - name: Verify index document
         run: |
           npx npxie eval-and-expect \
             "swarm-cli manifest list --verbose ${{ steps.upload.outputs.reference }} --bee-api-url https://api.gateway.ethswarm.org" \
-            "website-index-document: hello.html\nwebsite-error-document: error.html"
+            "website-index-document: hello.html"
+
+      - name: Verify error document
+        run: |
+          npx npxie eval-and-expect \
+            "swarm-cli manifest list --verbose ${{ steps.upload.outputs.reference }} --bee-api-url https://api.gateway.ethswarm.org" \
+            "website-error-document: error.html"
 
       - name: Verify HTTP 200 for bzz endpoint
         run: npx npxie code-equals "https://bzz.limo/${{ steps.upload.outputs.reference }}/" 200
