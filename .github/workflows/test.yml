@@ -87,6 +87,9 @@ jobs:
         run: |
           swarm-cli download ${{ steps.upload.outputs.reference }}/css/main.bundle.min.4e55be0357e7dec25cf1bea80877847773ee67f75d09281900b7bd8c8d07b4cded5555fb3b9c01a3826e021712d0fd63866586c0aa832ebb86de60c217a2f288.css --bee-api-url https://api.gateway.ethswarm.org
 
+      - name: Verify HTTP 200 for bzz endpoint
+        run: npx npxie code-equals "https://api.gateway.ethswarm.org/bzz/${{ steps.upload.outputs.reference }}/" 200
+
   test-experimental-flags:
     runs-on: ubuntu-latest
     steps:
@@ -125,3 +128,6 @@ jobs:
           npx npxie eval-and-expect \
             "swarm-cli manifest list --verbose ${{ steps.upload.outputs.reference }} --bee-api-url https://api.gateway.ethswarm.org" \
             "website-index-document: hello.html\nwebsite-error-document: error.html"
+
+      - name: Verify HTTP 200 for bzz endpoint
+        run: npx npxie code-equals "https://api.gateway.ethswarm.org/bzz/${{ steps.upload.outputs.reference }}/" 200
