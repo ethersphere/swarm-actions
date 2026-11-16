@@ -1,4 +1,17 @@
-name: 'release'
+# Release swarm-actions.
+#
+# Tags are protected: only the bee-releaser app (and org owners) can create tags,
+# vX.Y.Z tags can never be moved, and the floating tags (latest, vN, vN.M) can only
+# be moved by bee-releaser. So the release runs in the `release` environment, which
+# a devops member other than the starter must approve, and only from main.
+#
+# What it does: builds dist/ from main, commits it on a release commit that is not
+# on any branch (as before), creates vX.Y.Z and moves latest, vN and vN.M to it.
+# The version comes from the newest vX.Y.Z tag; main is not modified (pushing to
+# main needs 2 approvals), so package.json on main no longer tracks the version.
+name: release
+run-name: Release (${{ inputs.bump }}) by ${{ github.actor }}
+
 on:
   workflow_dispatch:
     inputs:
@@ -11,68 +24,96 @@ on:
           - minor
           - major
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+permissions: {}
 
-      - uses: actions/setup-node@v4
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '20'
 
-      - run: npm install
-      - run: npm run all --workspaces
-
-      - id: bump-version
-        run: npm version ${{ github.event.inputs.bump }} --no-git-tag-version
-
-      - id: get-version
+      - name: Compute next version
+        id: version
+        env:
+          BUMP: ${{ inputs.bump }}
         run: |
-          VERSION=$(node -pe "require('./package.json')['version']")
-          MAJOR=$(node -pe "require('./package.json')['version'].split('.')[0]")
-          MINOR=$(node -pe "require('./package.json')['version'].split('.').slice(0, 2).join('.')")
+          set -euo pipefail
+          LAST=$(git tag -l 'v*.*.*' --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          [ -n "$LAST" ] || { echo "::error::no vX.Y.Z tag found"; exit 1; }
+          IFS=. read -r MA MI PA <<< "${LAST#v}"
+          case "$BUMP" in
+            major) MA=$((MA+1)); MI=0; PA=0 ;;
+            minor) MI=$((MI+1)); PA=0 ;;
+            patch) PA=$((PA+1)) ;;
+          esac
+          VERSION="$MA.$MI.$PA"
+          if git rev-parse -q --verify "refs/tags/v$VERSION" >/dev/null; then
+            echo "::error::tag v$VERSION already exists"; exit 1
+          fi
+          {
+            echo "version=$VERSION"
+            echo "major=v$MA"
+            echo "minor=v$MA.$MI"
+          } >> "$GITHUB_OUTPUT"
+          echo "### Releasing v$VERSION (previous $LAST) from main ${GITHUB_SHA::12}" >> "$GITHUB_STEP_SUMMARY"
 
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "major=$MAJOR" >> $GITHUB_OUTPUT
-          echo "minor=$MINOR" >> $GITHUB_OUTPUT
+      - name: Build
+        run: |
+          npm ci
+          npm run all --workspaces
 
-      - uses: EndBug/add-and-commit@v9
+      - name: Commit dist on a release commit (not pushed to any branch)
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          npm version "$VERSION" --no-git-tag-version
+          git config user.name "bee-releaser[bot]"
+          git config user.email "bee-releaser[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git add --force -- */dist/*
+          git commit -m "Release v$VERSION"
+
+      # Token only after the build, so npm install scripts never see it.
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
-          add: 'package.json package-lock.json'
-          default_author: github_actor
-          message: 'Bump to v${{ steps.get-version.outputs.version }}'
-          push: true
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_KEY }}
+          # Least privilege: only pushes tags.
+          permission-contents: write
 
-      - uses: EndBug/add-and-commit@v9
-        id: commit
-        with:
-          add: '*/dist/* --force'
-          remove: './node_modules/*'
-          default_author: github_actor
-          message: 'Release v${{ steps.get-version.outputs.version }}'
-          push: false
-
-      - uses: rickstaa/action-create-tag@v1
-        with:
-          tag: 'latest'
-          commit_sha: ${{ steps.commit.outputs.commit_long_sha }}
-          force_push_tag: true
-
-      - uses: rickstaa/action-create-tag@v1
-        with:
-          tag: 'v${{ steps.get-version.outputs.major }}'
-          commit_sha: ${{ steps.commit.outputs.commit_long_sha }}
-          force_push_tag: true
-
-      - uses: rickstaa/action-create-tag@v1
-        with:
-          tag: 'v${{ steps.get-version.outputs.minor }}'
-          commit_sha: ${{ steps.commit.outputs.commit_long_sha }}
-          force_push_tag: true
-
-      - uses: rickstaa/action-create-tag@v1
-        with:
-          tag: 'v${{ steps.get-version.outputs.version }}'
-          commit_sha: ${{ steps.commit.outputs.commit_long_sha }}
-          force_push_tag: true
+      - name: Create vX.Y.Z and move latest / vN / vN.M
+        env:
+          TOKEN: ${{ steps.app-token.outputs.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          MAJOR: ${{ steps.version.outputs.major }}
+          MINOR: ${{ steps.version.outputs.minor }}
+        run: |
+          set -euo pipefail
+          REMOTE="https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git tag "v$VERSION"
+          git push "$REMOTE" "refs/tags/v$VERSION"
+          for t in latest "$MAJOR" "$MINOR"; do
+            git tag -f "$t"
+            git push -f "$REMOTE" "refs/tags/$t"
+          done
+          {
+            echo "Tagged \`v$VERSION\` at $(git rev-parse --short=12 HEAD)"
+            echo "Moved \`latest\`, \`$MAJOR\`, \`$MINOR\` to it"
+          } >> "$GITHUB_STEP_SUMMARY"
